@@ -4,15 +4,26 @@
     <div class="wrapper">
       <div class="Rtable Rtable--5cols Rtable--collapse">
         <div class="Rtable-row Rtable-row--head">
-          <div class="Rtable-cell project-cell column-heading"><h2>Issues</h2></div>
-          <div class="Rtable-cell pipeline-cell column-heading"><h2>Author</h2></div>
-          <div class="Rtable-cell commit-cell column-heading"><h2>Task</h2></div>
-          <div class="Rtable-cell stages-cell column-heading"><h2>Assignee</h2></div>
+          <div class="Rtable-cell project-cell column-heading">
+            <h2>Issues</h2>
+          </div>
+          <div class="Rtable-cell pipeline-cell column-heading">
+            <h2>Author</h2>
+          </div>
+          <div class="Rtable-cell commit-cell column-heading">
+            <h2>Task</h2>
+          </div>
+          <div class="Rtable-cell stages-cell column-heading">
+            <h2>Assignee</h2>
+          </div>
         </div>
 
-          <div class="Rtable-container" v-for="issue in newIssue.slice(0, 8) " :key="issue.object_attributes.id">
+        <div
+          class="Rtable-container"
+          v-for="issue in newIssue.slice(0, 8) "
+          :key="issue.object_attributes.id"
+        >
           <div class="Rtable-row background-success">
-
             <div class="Rtable-cell project-cell">
               <div class="Rtable-cell--heading">Date</div>
               <div class="Rtable-cell--content date-content">
@@ -30,83 +41,103 @@
               <div class="commit-cell__events">
                 <div class="Rtable-commit--bottom">
                   <h2 class="commit--pad">{{issue.object_attributes.issue_title | truncate(50) }}</h2>
-                </div> 
-              </div>  
+                </div>
+              </div>
             </div>
             <div class="Rtable-cell stages-cell">
               <div class="stages-cell__status">
                 <h2>{{issue.assignee}}</h2>
-              </div> 
+              </div>
             </div>
-            
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
-import Pusher from 'pusher-js'
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import Pusher from "pusher-js";
 
 export default {
-  name:'Issue',
+  name: "Issue",
   data() {
     return {
-      componentKey: 0,
+      componentKey: 0
     };
   },
   computed: {
     newIssue() {
-        return this.$store.getters.gitIssue;
-    },
+      return this.$store.getters.gitIssue;
+    }
   },
   methods: {
     forceRerender() {
-      this.componentKey += 1;  
+      this.componentKey += 1;
     }
   },
- 
+
   created() {
-    var pusher = new Pusher('1f1f7b3fb0d8aad224ac', {
-      cluster:'eu',
+    var pusher = new Pusher("", {
+      cluster: "eu",
       forceTLS: true,
-      authEndpoint: 'https://api-dashboard.incendiaryblue.com/broadcasting/auth',
+      authEndpoint:
+        "https://api-dashboard.incendiaryblue.com/broadcasting/auth",
       auth: {
         headers: {
-          'dashboard-auth': "GGhSdPe8WcPFdztwbYabvl2uOTtno"
+          "dashboard-auth": "GGhSdPe8WcPFdztwbYabvl2uOTtno"
         }
       }
-    })
-  
-    var channel = pusher.subscribe('private-dashboard')
-    channel.bind('GitlabIssue', function(data) {
-      console.log('->', data);
-      this.$store.dispatch('gitlabIssue', data.IssueData);
-    },this)
-  }  
-}
+    });
+
+    var channel = pusher.subscribe("private-dashboard");
+    channel.bind(
+      "GitlabIssue",
+      function(data) {
+        console.log("->", data);
+        this.$store.dispatch("gitlabIssue", data.IssueData);
+      },
+      this
+    );
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 $breakpoint: 750px;
-$heading-color: #43BAC0;
+$heading-color: #43bac0;
 
 .wrapper {
   width: 100%;
 }
 
-.is-striped { background-color: rgba(233,200,147,0.2) }
-
+.is-striped {
+  background-color: rgba(233, 200, 147, 0.2);
+}
 
 /* Table column sizing
 ================================== */
-.project-cell  { min-width: 20%; display: flex; align-items: center; }
-.pipeline-cell { min-width:30%; display: flex; align-items: center; }
-.commit-cell  { min-width: 30%; display: flex; align-items: center; }
-.stages-cell  { min-width: 20%; display: flex; align-items: center; }
+.project-cell {
+  min-width: 20%;
+  display: flex;
+  align-items: center;
+}
+.pipeline-cell {
+  min-width: 30%;
+  display: flex;
+  align-items: center;
+}
+.commit-cell {
+  min-width: 30%;
+  display: flex;
+  align-items: center;
+}
+.stages-cell {
+  min-width: 20%;
+  display: flex;
+  align-items: center;
+}
 
 /* Apply styles
 ================================== */
@@ -115,13 +146,13 @@ $heading-color: #43BAC0;
   flex-wrap: wrap;
   color: #fff;
   .Rtable-row--head {
-      display: none;
-    }
-  
+    display: none;
+  }
+
   .Rtable-row {
     width: 100%;
     display: flex;
-    
+
     .Rtable-cell {
       box-sizing: border-box;
       flex-grow: 1;
@@ -144,7 +175,7 @@ $heading-color: #43BAC0;
           font-size: 2em;
           color: #333;
         }
-        
+
         .webinar-date {
           font-weight: 700;
         }
@@ -159,21 +190,21 @@ $heading-color: #43BAC0;
   .is-striped {
     background-color: white;
   }
-  
-  .Rtable--collapse  {
+
+  .Rtable--collapse {
     display: block;
     width: 100%;
     padding: 1em;
     box-shadow: none;
-    
+
     .Rtable-row {
       box-sizing: border-box;
       width: 100%;
       display: flex;
       flex-wrap: wrap;
       margin-bottom: 2em;
-      box-shadow: 0 0 40px rgba(0,0,0,0.2);
-      
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+
       .Rtable-cell {
         width: 100% !important;
         display: flex;
@@ -196,18 +227,18 @@ $heading-color: #43BAC0;
         }
       }
     }
-    
-    .pipeline-cell{
+
+    .pipeline-cell {
       background-color: $heading-color;
       color: white;
       font-weight: 700;
       order: -1;
-      
+
       .Rtable-cell--content {
         padding-left: 0 !important;
       }
     }
-    
+
     .Rtable-row--head {
       display: none;
     }
@@ -217,7 +248,7 @@ $heading-color: #43BAC0;
 // Non-Flex modernizer fallback
 .no-flexbox .Rtable {
   display: block;
-  
+
   &.Rtable-cell {
     width: 100%;
   }
@@ -273,10 +304,10 @@ p {
   font-size: 1.25rem;
 }
 p.success {
-  color: #73AF55;
+  color: #73af55;
 }
 p.error {
-  color: #D06079;
+  color: #d06079;
 }
 @-webkit-keyframes dash {
   0% {
@@ -311,7 +342,6 @@ p.error {
   }
 }
 
-
 .fade-enter {
   opacity: 0;
 }
@@ -321,14 +351,14 @@ p.error {
 }
 
 .background-success {
-  background-color: rgba(36, 88, 164, .1);
+  background-color: rgba(36, 88, 164, 0.1);
   margin-bottom: 0.5rem;
 }
 .background-failed {
-  background-color: rgba(219, 59, 33, .5);
+  background-color: rgba(219, 59, 33, 0.5);
 }
 .background-running {
-  background-color: rgba(36, 88, 164, .5);
+  background-color: rgba(36, 88, 164, 0.5);
 }
 .Rtable-container {
   width: 100%;
@@ -336,29 +366,53 @@ p.error {
 
 /* FLICKER */
 @keyframes flickerAnimation {
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
-@-o-keyframes flickerAnimation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+@-o-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
-@-moz-keyframes flickerAnimation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+@-moz-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
-@-webkit-keyframes flickerAnimation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+@-webkit-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 .animate-flicker {
-   -webkit-animation: flickerAnimation 1s infinite;
-   -moz-animation: flickerAnimation 1s infinite;
-   -o-animation: flickerAnimation 1s infinite;
-    animation: flickerAnimation 1s infinite;
+  -webkit-animation: flickerAnimation 1s infinite;
+  -moz-animation: flickerAnimation 1s infinite;
+  -o-animation: flickerAnimation 1s infinite;
+  animation: flickerAnimation 1s infinite;
 }
 </style>

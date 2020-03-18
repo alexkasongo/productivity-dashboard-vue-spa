@@ -1,13 +1,17 @@
 <template>
   <div>
-    <main >
+    <main>
       <div v-for="post in updateInstagram" :key="post.componentKey" class="Rcontainer">
         <div class="gallery">
           <div class="gallery-item" tabindex="0">
-            <img :src="post.instagramFeeds.recent_posted_picture.url" class="gallery-image" alt="">
+            <img :src="post.instagramFeeds.recent_posted_picture.url" class="gallery-image" alt />
             <div class="gallery-item-info">
               <ul>
-                <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i>{{post.instagramFeeds.likes_count}}</li>
+                <li class="gallery-item-likes">
+                  <span class="visually-hidden">Likes:</span>
+                  <i class="fas fa-heart" aria-hidden="true"></i>
+                  {{post.instagramFeeds.likes_count}}
+                </li>
               </ul>
             </div>
           </div>
@@ -18,22 +22,22 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
-import Pusher from 'pusher-js'
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import Pusher from "pusher-js";
 
 export default {
-  name: 'Instagrams',
+  name: "Instagrams",
   props: {
     msg: String
   },
   data() {
     return {
-      componentKey: 0,
+      componentKey: 0
     };
   },
   methods: {
     forceRerender() {
-      this.componentKey += 1;  
+      this.componentKey += 1;
     }
   },
   computed: {
@@ -41,221 +45,225 @@ export default {
       updateInstagram: "instagramFeed"
     })
   },
-  created(){
-    var pusher = new Pusher('1f1f7b3fb0d8aad224ac', {
-      cluster:'eu',
+  created() {
+    var pusher = new Pusher("", {
+      cluster: "eu",
       forceTLS: true,
-      authEndpoint: 'https://api-dashboard.incendiaryblue.com/broadcasting/auth',
+      authEndpoint:
+        "https://api-dashboard.incendiaryblue.com/broadcasting/auth",
       auth: {
         headers: {
-          'dashboard-auth': "GGhSdPe8WcPFdztwbYabvl2uOTtno"
+          "dashboard-auth": "GGhSdPe8WcPFdztwbYabvl2uOTtno"
         }
       }
-    })
+    });
 
-    var channel = pusher.subscribe('private-dashboard');
-    channel.bind('App\\Events\\InstagramFeedsEvent', function(data) { 
-    this.$store.dispatch('updateInstagram', data);
-    },this)
+    var channel = pusher.subscribe("private-dashboard");
+    channel.bind(
+      "App\\Events\\InstagramFeedsEvent",
+      function(data) {
+        this.$store.dispatch("updateInstagram", data);
+      },
+      this
+    );
   }
-}
+};
 </script>
 
 <style scoped>
 img {
-    display: block;
+  display: block;
 }
 
 .Rcontainer {
-    max-width: 93.5rem;
+  max-width: 93.5rem;
 }
 
 .btn {
-    display: inline-block;
-    font: inherit;
-    background: none;
-    border: none;
-    color: inherit;
-    padding: 0;
-    cursor: pointer;
+  display: inline-block;
+  font: inherit;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
 }
 
 .btn:focus {
-    outline: 0.5rem auto #4d90fe;
+  outline: 0.5rem auto #4d90fe;
 }
 
 .visually-hidden {
-    position: absolute !important;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;
-    clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
 }
 
 /* Gallery Section */
 
 .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    margin: -1rem -1rem;
-    padding-bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  margin: -1rem -1rem;
+  padding-bottom: 0.5rem;
 }
 
 .gallery-item {
-    position: relative;
-    flex: 1 0 22rem;
-    margin: 1rem;
-    color: #fff;
-    cursor: pointer;
+  position: relative;
+  flex: 1 0 22rem;
+  margin: 1rem;
+  color: #fff;
+  cursor: pointer;
 }
 
 .gallery-item:hover .gallery-item-info,
-.gallery-item:focus .gallery-item-info
- {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+.gallery-item:focus .gallery-item-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .gallery-item-info {
-    display: none;
+  display: none;
 }
 
 .gallery-item-info li {
-    display: inline-block;
-    font-size: 1.7rem;
-    font-weight: 600;
+  display: inline-block;
+  font-size: 1.7rem;
+  font-weight: 600;
 }
 
 .gallery-item-likes {
-    margin-right: 2.2rem;
+  margin-right: 2.2rem;
 }
 
 .gallery-item-type {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 2.5rem;
-    text-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2.5rem;
+  text-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
 }
 
 .fa-clone,
 .fa-comment {
-    transform: rotateY(180deg);
+  transform: rotateY(180deg);
 }
 
 .gallery-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 /* Loader */
 
 .loader {
-    width: 5rem;
-    height: 5rem;
-    border: 0.6rem solid #999;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    margin: 0 auto;
-    animation: loader 500ms linear infinite;
+  width: 5rem;
+  height: 5rem;
+  border: 0.6rem solid #999;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: loader 500ms linear infinite;
 }
 
 /* Media Query */
 
 @media screen and (max-width: 40rem) {
-    .profile {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 4rem 0;
-    }
+  .profile {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 4rem 0;
+  }
 
-    .profile::after {
-        display: none;
-    }
+  .profile::after {
+    display: none;
+  }
 
-    .profile-image,
-    .profile-user-settings,
-    .profile-bio,
-    .profile-stats {
-        float: none;
-        width: auto;
-    }
+  .profile-image,
+  .profile-user-settings,
+  .profile-bio,
+  .profile-stats {
+    float: none;
+    width: auto;
+  }
 
-    .profile-image img {
-        width: 7.7rem;
-    }
+  .profile-image img {
+    width: 7.7rem;
+  }
 
-    .profile-user-settings {
-        flex-basis: calc(100% - 10.7rem);
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 1rem;
-    }
+  .profile-user-settings {
+    flex-basis: calc(100% - 10.7rem);
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
 
-    .profile-user-name {
-        font-size: 2.2rem;
-    }
+  .profile-user-name {
+    font-size: 2.2rem;
+  }
 
-    .profile-edit-btn {
-        order: 1;
-        padding: 0;
-        text-align: center;
-        margin-top: 1rem;
-    }
+  .profile-edit-btn {
+    order: 1;
+    padding: 0;
+    text-align: center;
+    margin-top: 1rem;
+  }
 
-    .profile-edit-btn {
-        margin-left: 0;
-    }
+  .profile-edit-btn {
+    margin-left: 0;
+  }
 
-    .profile-bio {
-        font-size: 1.4rem;
-        margin-top: 1.5rem;
-    }
+  .profile-bio {
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+  }
 
-    .profile-edit-btn,
-    .profile-bio,
-    .profile-stats {
-        flex-basis: 100%;
-    }
+  .profile-edit-btn,
+  .profile-bio,
+  .profile-stats {
+    flex-basis: 100%;
+  }
 
-    .profile-stats {
-        order: 1;
-        margin-top: 1.5rem;
-    }
+  .profile-stats {
+    order: 1;
+    margin-top: 1.5rem;
+  }
 
-    .profile-stats ul {
-        display: flex;
-        text-align: center;
-        padding: 1.2rem 0;
-        border-top: 0.1rem solid #dadada;
-        border-bottom: 0.1rem solid #dadada;
-    }
+  .profile-stats ul {
+    display: flex;
+    text-align: center;
+    padding: 1.2rem 0;
+    border-top: 0.1rem solid #dadada;
+    border-bottom: 0.1rem solid #dadada;
+  }
 
-    .profile-stats li {
-        font-size: 1.4rem;
-        flex: 1;
-        margin: 0;
-    }
+  .profile-stats li {
+    font-size: 1.4rem;
+    flex: 1;
+    margin: 0;
+  }
 
-    .profile-stat-count {
-        display: block;
-    }
+  .profile-stat-count {
+    display: block;
+  }
 }
 
 /* Spinner Animation */
 
 @keyframes loader {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /*
@@ -267,33 +275,32 @@ Remove or comment-out the code block below to see how the browser will fall-back
 */
 
 @supports (display: grid) {
-    .profile {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        grid-template-rows: repeat(3, auto);
-        grid-column-gap: 1rem;
-        align-items: center;
-    }
+  .profile {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(3, auto);
+    grid-column-gap: 1rem;
+    align-items: center;
+  }
 
-    .profile-image {
-        grid-row: 1 / -1;
-    }
+  .profile-image {
+    grid-row: 1 / -1;
+  }
 
-    .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
-        grid-gap: .6rem;
-    }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    grid-gap: 0.6rem;
+  }
 
-    .profile-image,
-    .profile-user-settings,
-    .profile-stats,
-    .profile-bio,
-    .gallery-item,
-    .gallery {
-        width: auto;
-        margin: 0;
-    }
+  .profile-image,
+  .profile-user-settings,
+  .profile-stats,
+  .profile-bio,
+  .gallery-item,
+  .gallery {
+    width: auto;
+    margin: 0;
+  }
 }
-
 </style>

@@ -1,59 +1,63 @@
 <template>
   <div>
     <div v-for="status in updateState" :key="status.componentKey">
-    <span class="content" v-if="status.status === 'online'">
-      <h2 class="work">Sites are up</h2>
-    </span>
-    <span class="content-offline" v-if="status.status === 'offline'">
-      <h2 class="work-offline">Sites are down</h2>
-    </span>
-
+      <span class="content" v-if="status.status === 'online'">
+        <h2 class="work">Sites are up</h2>
+      </span>
+      <span class="content-offline" v-if="status.status === 'offline'">
+        <h2 class="work-offline">Sites are down</h2>
+      </span>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
-import Pusher from 'pusher-js'
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import Pusher from "pusher-js";
 
 export default {
-    name: 'State',
-    data() {
-        return {
-          componentKey: 0,
-        }
-    },
-    methods: {
+  name: "State",
+  data() {
+    return {
+      componentKey: 0
+    };
+  },
+  methods: {
     forceRerender() {
-      this.componentKey += 1;  
+      this.componentKey += 1;
+    }
+  },
+  computed: {
+    stateChange() {
+      return this.$store.getters.stateChange;
     },
-    },
-    computed: {
-      stateChange() {
-        return this.$store.getters.stateChange;
-      },
-      ...mapGetters({
-        updateState: "stateChange"
-      })
-    },
-    created(){
-    var pusher = new Pusher('1f1f7b3fb0d8aad224ac', {
-      cluster:'eu',
+    ...mapGetters({
+      updateState: "stateChange"
+    })
+  },
+  created() {
+    var pusher = new Pusher("", {
+      cluster: "eu",
       forceTLS: true,
-      authEndpoint: 'https://api-dashboard.incendiaryblue.com/broadcasting/auth',
+      authEndpoint:
+        "https://api-dashboard.incendiaryblue.com/broadcasting/auth",
       auth: {
         headers: {
-          'dashboard-auth': "GGhSdPe8WcPFdztwbYabvl2uOTtno"
+          "dashboard-auth": "GGhSdPe8WcPFdztwbYabvl2uOTtno"
         }
       }
-    })
-  
-    var channel = pusher.subscribe('private-dashboard');
-    channel.bind('UptimeCheckSucceeded', function(data) { 
-      this.$store.dispatch('updateState', data);
-    },this)
+    });
+
+    var channel = pusher.subscribe("private-dashboard");
+    channel.bind(
+      "UptimeCheckSucceeded",
+      function(data) {
+        this.$store.dispatch("updateState", data);
+      },
+      this
+    );
   }
-}
+};
 </script>
 
 <style scoped>
@@ -99,7 +103,7 @@ export default {
 }
 
 .content {
-  font-family: 'Lato',sans-serif;
+  font-family: "Lato", sans-serif;
   text-align: center;
   background-color: #23272f;
   text-align: center;
@@ -134,11 +138,21 @@ h1 {
 }
 
 @keyframes colorAnimation {
-  0% {background-color: #212221;}
-  25%{background-color: #1181B2;}
-  50%{background-color: #DDEDF4;}
-  75%{background-color: #1181B2;}
-  100% {background-color: #212221;}
+  0% {
+    background-color: #212221;
+  }
+  25% {
+    background-color: #1181b2;
+  }
+  50% {
+    background-color: #ddedf4;
+  }
+  75% {
+    background-color: #1181b2;
+  }
+  100% {
+    background-color: #212221;
+  }
 }
 
 /* OFFLINE */
@@ -148,7 +162,7 @@ h1 {
   width: 40px;
   height: 40px;
   will-change: transform;
-  animation: rotator .5s linear infinite;
+  animation: rotator 0.5s linear infinite;
 }
 
 .inner:first-child {

@@ -1,17 +1,15 @@
           
-<template>
- 
-</template>
+<template></template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
-import Pusher from 'pusher-js'
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import Pusher from "pusher-js";
 
 export default {
-  name:'Push',
+  name: "Push",
   data() {
     return {
-      componentKey: 0, 
+      componentKey: 0
     };
   },
   computed: {
@@ -22,49 +20,55 @@ export default {
   },
   methods: {
     forceRerender() {
-      this.componentKey += 1;  
+      this.componentKey += 1;
     },
     pushNotice(data) {
-      this.$notification.success(`${data[0].pushData.user_name}` + " has made a push!", {
-        title: "PUSH",  
-        timer: 10, 
-        showLeftIcn: false, 
-        showCloseIcn: true,
-        position: "topRight" 
-      });
+      this.$notification.success(
+        `${data[0].pushData.user_name}` + " has made a push!",
+        {
+          title: "PUSH",
+          timer: 10,
+          showLeftIcn: false,
+          showCloseIcn: true,
+          position: "topRight"
+        }
+      );
     }
   },
-  
+
   // NOTE use getters to alter state
   mounted() {
-    this.$store.watch(this.gitPushWatch,(data) => {
-      
-      if (data){
-        this.pushNotice(data)
+    this.$store.watch(this.gitPushWatch, data => {
+      if (data) {
+        this.pushNotice(data);
       }
-
-    }) 
+    });
   },
   created() {
-    var pusher = new Pusher('1f1f7b3fb0d8aad224ac', {
-      cluster:'eu',
+    var pusher = new Pusher("", {
+      cluster: "eu",
       forceTLS: true,
-      authEndpoint: 'https://api-dashboard.incendiaryblue.com/broadcasting/auth',
+      authEndpoint:
+        "https://api-dashboard.incendiaryblue.com/broadcasting/auth",
       auth: {
         headers: {
-          'dashboard-auth': "GGhSdPe8WcPFdztwbYabvl2uOTtno"
+          "dashboard-auth": "GGhSdPe8WcPFdztwbYabvl2uOTtno"
         }
       }
-    })
-  
-    var channel = pusher.subscribe('private-dashboard')
-    channel.bind('GitlabPush', function(data) { 
+    });
+
+    var channel = pusher.subscribe("private-dashboard");
+    channel.bind(
+      "GitlabPush",
+      function(data) {
         let gitPushData = [];
-        gitPushData.push(data)
-        this.$store.dispatch('updateGitPush', gitPushData);
-    },this)
-  }  
-}
+        gitPushData.push(data);
+        this.$store.dispatch("updateGitPush", gitPushData);
+      },
+      this
+    );
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,12 +84,12 @@ table {
 }
 
 table caption {
-  margin: .5rem 0 .75rem;
+  margin: 0.5rem 0 0.75rem;
 }
 
 table tr {
   background-color: #23272f;
-  padding: .35em;
+  padding: 0.35em;
 }
 
 table th,
@@ -95,13 +99,13 @@ table td {
 }
 
 table th {
-  letter-spacing: .1rem;
+  letter-spacing: 0.1rem;
   text-transform: uppercase;
 }
 
 .thead {
   border-bottom: 1px solid #555555;
-  color: #fff
+  color: #fff;
 }
 .tbody {
   border-bottom: 1px solid #555555;
@@ -111,7 +115,7 @@ table th {
   table {
     border: 0;
   }
-  
+
   table thead {
     border: none;
     clip: rect(0 0 0 0);
@@ -122,25 +126,25 @@ table th {
     position: absolute;
     width: 0.1rem;
   }
-  
+
   table tr {
     display: block;
-    margin-bottom: .625rem;
+    margin-bottom: 0.625rem;
   }
-  
+
   table td {
     border-bottom: 0.1rem solid #555555;
     display: block;
     text-align: right;
   }
-  
+
   table td::before {
     content: attr(data-label);
     float: left;
     font-weight: bold;
     text-transform: uppercase;
   }
-  
+
   table td:last-child {
     border-bottom: 0;
   }
@@ -153,9 +157,9 @@ table th {
     justify-content: flex-end;
   }
   .stages--table {
-  display: flex;  
-  justify-content: flex-end;
-}
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 /* Styling */
@@ -174,8 +178,8 @@ table th {
   border-radius: 4px;
 }
 .status-success {
-    color: #1aaa55;
-    border-color: #1aaa55;
+  color: #1aaa55;
+  border-color: #1aaa55;
 }
 .status-failed {
   color: #db3b21;
@@ -190,7 +194,7 @@ table th {
   height: 2.5rem;
   width: fit-content;
   border-radius: 4px;
-  background-color: #01D2FF;
+  background-color: #01d2ff;
 
   white-space: nowrap;
 }
@@ -208,20 +212,19 @@ table th {
   border-radius: 50%;
 }
 .commit--number {
-  color: #1b69b6
+  color: #1b69b6;
 }
-.commit--message{
-  padding-left: 0.5rem; 
+.commit--message {
+  padding-left: 0.5rem;
 }
 
 /* TABLE */
 .stages--table {
-  display: flex;  
+  display: flex;
 }
 
 /* TIME */
 .time {
   text-align: right;
 }
-
 </style>
